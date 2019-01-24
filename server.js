@@ -10,6 +10,11 @@ const db = 'mongodb://admin1:admin123@ds163014.mlab.com:63014/mern-project';
 
 const Users = require('./models/User');
 
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME ,
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET
+})
 
 app.use(express.json());
 
@@ -26,8 +31,4 @@ mongoose
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`server started on port ${port}`));
 
-cloudinary.config({ 
-  cloud_name: 'cloudinary-thomas-lawrence', 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+;
