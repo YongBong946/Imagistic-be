@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = 'mongodb://admin1:admin123@ds163014.mlab.com:63014/mern-project';
+const db = process.env.DB_URL;
 
 mongoose.connect(db, { useNewUrlParser: true });
 
