@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-// const dotenv = require('dotenv');
-// dotenv.config();
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const cloudinary = require('cloudinary');
 const User = require('../models/User');
 
 const saltRounds = 5;
@@ -89,7 +88,19 @@ const isAuthenticated = (req, res, next) => {
       else {
           return res.send('Please send user details');
       }
-  })
+  });
+
+  router.post('/photo/upload', isAuthenticated, (req, res) => {
+    cloudinary.v2.uploader.upload(req.files.myImage.path, (err, result) => {
+        if (result) {
+            res.send(result)
+        }
+        else {
+            res.send(err)
+        }
+    })
+
+});
 
 
 module.exports = router;
