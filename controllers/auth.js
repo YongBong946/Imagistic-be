@@ -8,6 +8,7 @@ const cloudinary = require('cloudinary');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' })
 const User = require('../models/User');
+const Image = require('../models/Image')
 
 const saltRounds = 5;
 const oneDay = 1000 * 60 * 60 * 24;
@@ -93,16 +94,27 @@ const isAuthenticated = (req, res, next) => {
   });
 
   router.post('/photo/upload', isAuthenticated, upload.single('file'), (req, res) => {
-    console.log(req.file)
     cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
         if (result) {
-            res.send(result)
+            const { title, description, selectedAlbumArray, tagArray } = req.body
+            const { url } = result
+            const album = selectedAlbumArray.split(',')
+            const tag = tagArray.split(',')
+            const newImage = {
+                title: title,
+                image: url,
+                description: description,
+                tags: tag,
+                album: album
+            }
+            Image.create(newImage)
+                .then(doc => res.send(`Your image: ${doc.title} has been successfully uploaded`))
+                .catch(err => res.send(err))
         }
         else {
             res.send(err)
         }
     })
 });
-
 
 module.exports = router;
