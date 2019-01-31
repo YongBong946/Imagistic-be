@@ -16,14 +16,10 @@ const imageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  album: [
-    {
-    name:
-    {
+  album: [{
       type: String,
       required: true
-    }
-  }],
+    }],
   tags: [{
       type: String,
       required: true
