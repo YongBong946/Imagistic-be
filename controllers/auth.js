@@ -64,9 +64,17 @@ const isAuthenticated = (req, res, next) => {
     next();
   };
 
-
   router.post('/login', passport.authenticate('local'), (req, res) => {
       res.send('Successfully logged in')
+  });
+
+  router.get('/userloggedin', isAuthenticated, (req, res, next) => {
+      if (!req.user) {
+          return res.status(403).send('Not logged in')
+      }
+      else {
+          return res.status(200).send('User logged in and authenticated')
+      }
   });
 
   router.post('/register', (req, res) => {
