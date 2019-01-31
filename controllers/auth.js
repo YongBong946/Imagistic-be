@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const cloudinary = require('cloudinary');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' })
 const User = require('../models/User');
 
 const saltRounds = 5;
@@ -90,8 +92,9 @@ const isAuthenticated = (req, res, next) => {
       }
   });
 
-  router.post('/photo/upload', isAuthenticated, (req, res) => {
-    cloudinary.v2.uploader.upload(req.files.myImage.path, (err, result) => {
+  router.post('/photo/upload', isAuthenticated, upload.single('file'), (req, res) => {
+    console.log(req.file)
+    cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
         if (result) {
             res.send(result)
         }
@@ -99,7 +102,6 @@ const isAuthenticated = (req, res, next) => {
             res.send(err)
         }
     })
-
 });
 
 
