@@ -20,8 +20,9 @@ app.use(cors({
   credentials: true,
   origin: 'http://localhost:3000'
 }));
+
 app.use(express.json());
 app.use(require('./controllers'));
 
-app.listen(port, () => console.log(`server started on port ${port}`));
+app.listen();
 

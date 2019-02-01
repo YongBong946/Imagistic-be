@@ -6,7 +6,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const cloudinary = require('cloudinary');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' })
+const upload = multer();
 const User = require('../models/User');
 const Image = require('../models/Image')
 

@@ -1,0 +1,24 @@
+{
+    "version": 2,
+    "builds": [{
+        "src": "/server.js",
+        "use": "@now/node-server"
+    }],
+
+    "routes": [{
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+        },
+        "src": "/.*",
+        "dest": "/server.js"
+    }],
+    "env": {
+        "CLOUD_NAME": "@cloud_name",
+        "DB_URL": "@db_url",
+        "API_KEY": "@api_key",
+        "API_SECRET": "@api_secret",
+        "COOKIE_SECRET": "@cookie_secret"
+      }
+}
