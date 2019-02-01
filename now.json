@@ -19,6 +19,7 @@
         "DB_URL": "@db_url",
         "API_KEY": "@api_key",
         "API_SECRET": "@api_secret",
-        "COOKIE_SECRET": "@cookie_secret"
+        "COOKIE_SECRET": "@cookie_secret",
+        "ORIGIN_URL": "@origin_url"
       }
 }
