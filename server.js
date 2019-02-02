@@ -18,10 +18,11 @@ cloudinary.config({
 
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:3000'
+  origin: process.env.ORIGIN_URL
 }));
+
 app.use(express.json());
 app.use(require('./controllers'));
 
-app.listen(port, () => console.log(`server started on port ${port}`));
+app.listen(port, () => console.log(`listening on port ${port}`));
 
