@@ -5,6 +5,55 @@
 >React js
 >Node js
 
+<h3>Front End packages</h3>
+<h4>"axios": "^0.18.0"</h4>
+A request based library used to perform http requests. It takes care of the data transformation to JSON. It is a promise based, offers better error handling and has cross site forgery protection.
+
+<h4>"react": "^16.7.0"</h4>
+A flexible library that build user interface based on components set on how and what to render. Using a virtual DOM to run data that gets display on your page without refreshing.
+
+
+
+    <h4>"react-dom": "^16.7.0"</h4>
+    <h4>"react-router-dom": "^4.3.1"</h4>
+    <h4>"react-scripts": "2.1.3"</h4>
+
+***
+<h3>Back End packages</h3>
+<h4>"bcrypt": "^3.0.3"</h4>
+A program that hashes passwords by incorporating "salt", data used as part of the hashing resulting in a stronger, more complex hash to protect the password<br/>
+
+<h4>"cloudinary": "^1.13.2"</h4>
+A package developed by Cloudinary integrating access between API to its cloud server. Cloudinary is a platform that hosts media files.
+
+<h4>"concurrently": "^4.1.0"</h4>
+A package that lets you run multiple scripts concurrently.
+
+<h4>"cookie-session": "^2.0.0-beta.3"</h4>
+A package that allows you to create a cookie that stores user credentials in a cookie and store in temporary local storage with the ability to set time to auto destroy, or when browser is closed.
+
+<h4>"cors": "^2.8.5"</h4>
+Cross-Origin Resource Sharing, a package that allows it's user to set up access control to allow communication between 2 or more domains into your API.
+
+<h4>"dotenv": "^6.2.0"</h4>
+a stand alone module that loads environment variables, allowing user to set password and other sensitive information on a separate file, that can be hidden away from the code. This flow is based on the twelve factor app methodology.
+
+<h4>"express": "^4.16.4"</h4>
+A light-weight framework that preps your app with MVC architecture.
+
+<h4>"mongoose": "^5.4.5"</h4>
+A MongoDB relationship manager between data, runs a schema validation.
+
+<h4>"multer": "^1.4.1"</h4>
+A middleware that helps upload files.
+
+<h4>"passport": "^0.4.0"</h4>
+An authentication middleware
+
+<h4>"passport-local": "^1.0.0"</h4>
+A local authentication middleware
+
+
 <!-- not required!, but will double check with Gretch -->
 TODO:<h1>Project Charter</h1>
 
@@ -33,18 +82,75 @@ TODO:<h1>Project Charter</h1>
     Approval signatures by phase
 
 
-
   TODO:*Compose a summary of your application including problem definition and solution*
+  ><h3>Project:</h3> 
+  >Building a working website to show for a Professional photographer Dave Sumner to show his Portfolio.
+  >The application required a Dashboard page with access control for client to update and maintain his data.
+
+FIXME:><h3>Problem definition:</h3>
+>Data Schema
+
+FIXME:><h3>Solutions</h3>
+
+
    
   TODO:*Review the conceptual design with the client and edit based on their feedback<strong>User stories</strong> for the whole application*
 
-  TODO:*A workflow diagram of the user journey/s*
+  *A workflow diagram of the user journey/s*
+  **Done!**
+
 
   TODO:*Wireframes for all main pages of your app*
   
-  TODO:*Entity Relationship Diagram (ERD)*
+  *MongoDB Object Data Modeling Diagram* DONE!
+  ```json
+userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true
+  },
+  password: String
+});
+```
+***
+
+
+```json
+imageSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now
+  },
+  album: [{
+      type: String,
+      required: true
+    }],
+  tags: [{
+      type: String,
+      required: true
+  }]
+});
+  ```
+  ***
+
     Project plan and effort estimation
-  TODO:*Data Flow Diagram*
+
+
+  *Data Flow Diagram*
+  **Done!**
+
     OO design documentation
 
 **Tools**
@@ -74,8 +180,11 @@ Go outside your comfort zone. Ask colleaques, teachers or even rubber ducking wh
 
 
 <h2>Evaluate how effective your knowledge and skills were this project, using examples, and suggest changes or improvements for future projects of a similar nature?</h2>
->Having to complete the first 6 months within Coder Academy, this time round as a team, we felt that we are more prepared conceptually, and able to have a better understanding on how to approach certain task. The course has also made us become a better "googler". 
+>Having to complete the first 6 months within Coder Academy, this time round as a team, we felt that we are more prepared conceptually, and able to have a better understanding on how to approach certain task on hand. The course has also made us become a better "googler".<br/> 
 >Agile methodology is a powerful tool that everyone should be holding on to. It is definitely a tool that is worth looking deeper into to understand how it can be applied once we are in the workforce.
+
+***
+
 
 
 
