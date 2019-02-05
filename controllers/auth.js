@@ -78,7 +78,7 @@ const isAuthenticated = (req, res, next) => {
       }
   });
 
-  router.post('/register', (req, res) => {
+  router.post('/register', isAuthenticated, (req, res) => {
       const { username, password } = req.body;
       if (username && password) {
         User.findOne({ username })
@@ -129,7 +129,8 @@ const isAuthenticated = (req, res, next) => {
 
 router.patch('/photo/:id', isAuthenticated, (req, res) => {
     const { id } = req.params;
-    Image.findByIdAndUpdate(id, { $set: req.data}, (err, img) => {
+    console.log(req.body)
+    Image.findByIdAndUpdate(id, { $set: req.body}, (err, img) => {
         if (err) {
             res.send(err)
         }
@@ -139,7 +140,7 @@ router.patch('/photo/:id', isAuthenticated, (req, res) => {
     });
 })
 
-router.delete('/photo/:id', isAuthenticated (req, res) => {
+router.delete('/photo/:id', isAuthenticated, (req, res) => {
     const { id } = req.params;
     Image.findById(id)
         .then(doc => {
