@@ -6,7 +6,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const cloudinary = require('cloudinary');
 const multer = require('multer');
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({storage: storage});
 const User = require('../models/User');
 const Image = require('../models/Image')
 
@@ -102,7 +103,7 @@ const isAuthenticated = (req, res, next) => {
   });
 
   router.post('/photo/upload', isAuthenticated, upload.single('file'), (req, res) => {
-    cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
+    cloudinary.v2.uploader.upload_stream({resource_type: 'raw'}, (err, result) => {
         if (result) {
             const { title, description, selectedAlbumArray, tagArray } = req.body
             const { url } = result
@@ -122,7 +123,41 @@ const isAuthenticated = (req, res, next) => {
         else {
             res.send(err)
         }
-    })
+
+    }).end(req.file.buffer)
+});
+
+router.patch('/photo/:id', isAuthenticated, (req, res) => {
+    const { id } = req.params;
+    Image.findByIdAndUpdate(id, { $set: req.data}, (err, img) => {
+        if (err) {
+            res.send(err)
+        }
+        else {
+            res.send(img)
+        }
+    });
+})
+
+router.delete('/photo/:id', isAuthenticated (req, res) => {
+    const { id } = req.params;
+    Image.findById(id)
+        .then(doc => {
+            const url = doc.image;
+            const splitUrl = url.split('/')
+            const publicID = splitUrl[7].split('.')[0]
+            cloudinary.v2.uploader.destroy(publicID, (err, result) => {
+                if (result) {
+                    Image.findByIdAndDelete(id)
+                        .then(response => res.send(response))
+                        .catch(error => res.send(error))
+                }
+                else {
+                    res.send(err)
+                }
+            })
+        })
+        .catch(err => res.send(err))
 });
 
 module.exports = router;
