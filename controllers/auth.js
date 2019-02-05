@@ -78,6 +78,11 @@ const isAuthenticated = (req, res, next) => {
       }
   });
 
+  router.get('/logout', isAuthenticated, (req, res) => {
+      req.logout()
+      res.send('User logged out')
+  });
+
   router.post('/register', isAuthenticated, (req, res) => {
       const { username, password } = req.body;
       if (username && password) {
