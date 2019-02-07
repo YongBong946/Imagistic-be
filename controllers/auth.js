@@ -14,6 +14,7 @@ const Image = require('../models/Image')
 const saltRounds = 5;
 const oneDay = 1000 * 60 * 60 * 24;
 
+//Creating a cookie to maintain the users session
 const cookie = cookieSession({
     name: 'session',
     keys: [process.env.COOKIE_SECRET],
@@ -21,6 +22,8 @@ const cookie = cookieSession({
 })
 
 router.use(cookie);
+
+//Using passport to assist with attaching the cookie and managing the user session
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -34,18 +37,20 @@ passport.deserializeUser((username, done) => {
     });
 });
 
+// Passport local strategy that integrates with mongoose to find a user
+// We are using bcrypt to hash passwords, we compare the plain text to the stored hash below
 passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username: username}, (err, user) => {
         if (err) {
             return done(err);
         }
         if (!user) {
-            return done(null, false, { message: 'Incorrect username'}) //Change this after testing to Bad credentials
+            return done(null, false, { message: 'Bad credentials'}) //Change this after testing to Bad credentials
         }
 
         bcrypt.compare(password, user.password, (err, result) => {
             if (result !== true) {
-                return done(null, false, { mesasage: 'Incorrect password...'}) //Change this after testing to Bad credentials
+                return done(null, false, { mesasage: 'Bad credentials'}) //Change this after testing to Bad credentials
             }
             else {
                 return done(null, user)
@@ -57,7 +62,7 @@ passport.use(new LocalStrategy((username, password, done) => {
 ));
 
 
-
+// Middleware that runs on routes that require the user to be logged in
 const isAuthenticated = (req, res, next) => {
     if(!req.user) {
       return res.status(403).send('Not authorized!');
@@ -65,11 +70,14 @@ const isAuthenticated = (req, res, next) => {
     next();
   };
 
+  
+  // Login route that auths with passport local
   router.post('/login', passport.authenticate('local'), (req, res) => {
       res.send('Successfully logged in')
   });
 
-  router.get('/userloggedin', isAuthenticated, (req, res, next) => {
+  // Simple route to check if a user is logged in and return this 
+  router.get('/userloggedin', isAuthenticated, (req, res) => {
       if (!req.user) {
           return res.status(403).send('Not logged in')
       }
@@ -78,11 +86,14 @@ const isAuthenticated = (req, res, next) => {
       }
   });
 
+
+//Logout route to destory a user's session
   router.get('/logout', isAuthenticated, (req, res) => {
       req.logout()
       res.send('User logged out')
   });
 
+// Registration route for making a user - this route is locked behind authentication
   router.post('/register', isAuthenticated, (req, res) => {
       const { username, password } = req.body;
       if (username && password) {
@@ -107,6 +118,8 @@ const isAuthenticated = (req, res, next) => {
       }
   });
 
+// Photo upload route. This links up with Cloudinary and mongoose to perform the creation
+// actions in the appropriate order
   router.post('/photo/upload', isAuthenticated, upload.single('file'), (req, res) => {
     cloudinary.v2.uploader.upload_stream({resource_type: 'raw'}, (err, result) => {
         if (result) {
@@ -132,6 +145,7 @@ const isAuthenticated = (req, res, next) => {
     }).end(req.file.buffer)
 });
 
+// Patch route to edit a photo's details
 router.patch('/photo/:id', isAuthenticated, (req, res) => {
     const { id } = req.params;
     console.log(req.body)
@@ -145,6 +159,7 @@ router.patch('/photo/:id', isAuthenticated, (req, res) => {
     });
 })
 
+// Delete route to delete a photo from both Cloudinary and mongodb
 router.delete('/photo/:id', isAuthenticated, (req, res) => {
     const { id } = req.params;
     Image.findById(id)
